@@ -1,0 +1,7 @@
+{
+    "env": {
+        "API_PORT": "3000",
+        "MONGO_ATLAS_PW": "sample12345",
+        "JWT_KEY": "sample12345"
+    }
+}
