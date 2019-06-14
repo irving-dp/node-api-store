@@ -1,2 +1,4 @@
 /node_modules
+/upload/*.jpg
+/upload/*.jpeg
 nodemon.json
