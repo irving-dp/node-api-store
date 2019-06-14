@@ -4,7 +4,7 @@ const Product = require("../models/product");
 
 exports.product_get_all = (req, res, next) => {
     Product.find()
-    .select('name price productImage')
+    .select('name price_buy price_sell productImage')
     .exec()
     .then(docs => {
         if (docs.length >= 0) {
@@ -12,10 +12,11 @@ exports.product_get_all = (req, res, next) => {
                 count: docs.length,
                 product: docs.map(doc => {
                     return {
-                        name: doc.name,
-                        price: doc.price,
-                        productImage: doc.productImage,
                         id: doc.id,
+                        name: doc.name,
+                        buy: doc.price_buy,
+                        sell: doc.price_sell,
+                        productImage: doc.productImage,
                         url: {
                             type: 'GET',
                             url: 'http://localhost:3000/products/' + doc._id
@@ -43,7 +44,8 @@ exports.product_store_product = (req, res, next) => {
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
-        price: req.body.price,
+        price_buy: req.body.price_buy,
+        price_sell: req.body.price_sell,
         productImage: req.file.path
     });
     product.save()
@@ -51,9 +53,10 @@ exports.product_store_product = (req, res, next) => {
         res.status(201).json({
             message: "Created Data Successfuly",
             createdProduct: {
-                name: result.name,
-                price: result.price,
                 id: result._id,
+                name: result.name,
+                price_buy: result.price_buy,
+                price_sell: result.price_sell,
                 request: {
                     type: 'GET',
                     url: 'http://localhost:3000/products/' + result._id
@@ -71,7 +74,7 @@ exports.product_store_product = (req, res, next) => {
 exports.product_get_product = (req, res, next) => {
     const id = req.params.productId;
     Product.findById(id)
-    .select('name price productImage _id')
+    .select('name price_buy price_sell productImage _id')
     .exec()
     .then(doc => {
         if (doc) {
