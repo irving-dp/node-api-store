@@ -28,11 +28,13 @@ app.use((req, res, next)=>{
     next(); 
 });
 //init routes
+const categoryRoutes = require('./api/routes/category-routes');
 const productRoutes = require('./api/routes/product-routes');
 const orderRoutes = require('./api/routes/order-routes');
 const userRoutes = require('./api/routes/user-routes');
 
 //Routes which should handle request
+app.use('/category', categoryRoutes);
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
 app.use('/users', userRoutes);

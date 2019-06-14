@@ -17,7 +17,7 @@ exports.product_get_all = (req, res, next) => {
                         buy: doc.price_buy,
                         sell: doc.price_sell,
                         productImage: doc.productImage,
-                        url: {
+                        request: {
                             type: 'GET',
                             url: 'http://localhost:3000/products/' + doc._id
                         }
@@ -77,7 +77,7 @@ exports.product_get_product = (req, res, next) => {
     .select('name price_buy price_sell productImage _id')
     .exec()
     .then(doc => {
-        if (doc) {
+        if (doc){
             res.status(200).json({
                 product: doc,
                 request: {
