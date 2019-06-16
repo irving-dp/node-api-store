@@ -1,10 +1,11 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); 
 //include models
 const Product = require("../models/product");
+const Category = require("../models/category");
 
-exports.product_get_all = (req, res, next) => {
+exports.get_all = (req, res, next) => {
     Product.find()
-    .select('name price_buy price_sell productImage')
+    .select('name categoryId price_buy price_sell productImage')
     .exec()
     .then(docs => {
         if (docs.length >= 0) {
@@ -14,6 +15,7 @@ exports.product_get_all = (req, res, next) => {
                     return {
                         id: doc.id,
                         name: doc.name,
+                        categoryId:doc.categoryId,
                         buy: doc.price_buy,
                         sell: doc.price_sell,
                         productImage: doc.productImage,
@@ -40,30 +42,37 @@ exports.product_get_all = (req, res, next) => {
 }
 
 //store data to DB
-exports.product_store_product = (req, res, next) => {
+exports.store = (req, res, next) => {
+   
     const product = new Product({
-        _id: new mongoose.Types.ObjectId(),
-        name: req.body.name,
-        price_buy: req.body.price_buy,
-        price_sell: req.body.price_sell,
+        _id         : new mongoose.Types.ObjectId(),
+        name        : req.body.name,
+        categoryId  : req.body.categoryId,
+        price_buy   : req.body.price_buy,
+        price_sell  : req.body.price_sell,
+        stock       : req.body.stock,
         productImage: req.file.path
     });
-    product.save()
+
+    product.save() 
     .then(result => {
         res.status(201).json({
             message: "Created Data Successfuly",
             createdProduct: {
-                id: result._id,
-                name: result.name,
-                price_buy: result.price_buy,
-                price_sell: result.price_sell,
+                id          : result._id,
+                name        : result.name,
+                categoryId  : result.categoryId,
+                price_buy   : result.price_buy,
+                price_sell  : result.price_sell,
+                stock       : result.stock,
                 request: {
                     type: 'GET',
                     url: 'http://localhost:3000/products/' + result._id
                 }
             }
         });
-    }).catch(err => {
+    })
+    .catch(err => {
         console.log(err);
         res.status(500).json({
             error: err
@@ -71,10 +80,10 @@ exports.product_store_product = (req, res, next) => {
     });
 }
 
-exports.product_get_product = (req, res, next) => {
+exports.show = (req, res, next) => {
     const id = req.params.productId;
     Product.findById(id)
-    .select('name price_buy price_sell productImage _id')
+    .select('name categoryId price_buy price_sell productImage _id')
     .exec()
     .then(doc => {
         if (doc){
@@ -99,13 +108,13 @@ exports.product_get_product = (req, res, next) => {
     });
 }
 
-exports.product_update_product = (req, res, next) => {
+exports.update = (req, res, next) => {
     const id = req.params.productId;
     const updateOps = {};
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
     }
-    Product.updateMany({ _id: id }, { $set: updateOps })
+    Product.update({ _id: id }, { $set: updateOps })
     .exec()
     .then(result => {
         res.status(200).json({
@@ -124,7 +133,7 @@ exports.product_update_product = (req, res, next) => {
     });
 }
 
-exports.product_delete_product = (req, res, next) => {
+exports.delete = (req, res, next) => {
     const id = req.params.productId;
     Product.remove({ _id: id })
     .exec()

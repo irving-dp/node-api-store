@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 app.use('/uploads', express.static('uploads'));
 
 //connect to mongo db atlas
-mongoose.connect('mongodb+srv://root:' + process.env.MONGO_ATLAS_PW + '@node-api-store-blvcz.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true });
+mongoose.connect("mongodb+srv://root:" + process.env.MONGO_ATLAS_PW + "@node-api-store-blvcz.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 
 //log request 
@@ -27,6 +27,7 @@ app.use((req, res, next)=>{
     }
     next(); 
 });
+
 //init routes
 const categoryRoutes = require('./api/routes/category-routes');
 const productRoutes = require('./api/routes/product-routes');
