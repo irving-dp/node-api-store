@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 app.use('/uploads', express.static('uploads'));
 
 //connect to mongo db atlas
-mongoose.connect("mongodb+srv://root:" + process.env.MONGO_ATLAS_PW + "@node-api-store-blvcz.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true });
+mongoose.connect("mongodb+srv://root:" + process.env.MONGO_ATLAS_PW + "@node-api-store-blvcz.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = global.Promise;
 
 //log request 
@@ -19,12 +19,8 @@ app.use(bodyParser.json());
 //CORS Error Handling
 app.use((req, res, next)=>{
     res.header("Access-Control-Allow-Origin", "*"); //* give access to any client
-    res.header("Access-Control-Allow-Headers","Origin, X-Requested, Content-Type','Accept','Autorization");
-    if (req.method === 'OPTIONS'){
-        //allowed requset method
-        res.header('Access-Control-Allow-Headers','GET, POST, PUT, PATCH, DELETE');
-        return res.status(200).json({});
-    }
+    res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.header('Access-Control-Allow-Methods','GET, POST, PUT, PATCH, DELETE');
     next(); 
 });
 
