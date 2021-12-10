@@ -6,7 +6,8 @@ const checkAuth = require('../middlewere/check-auth');
 const CategoryController = require('../controller/category-controller');
 
 //handle incoming GET requests to /category
-router.get('/', checkAuth, CategoryController.get_all);
+//router.get('/', checkAuth, CategoryController.get_all);
+router.get('/', CategoryController.get_all);
 
 router.get('/:categoryId', checkAuth, CategoryController.show);
 

@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const Category = require('../models/category');
 
 //get all data
-exports.get_all = (req, res, next) => {
-    Category.find()
+exports.get_all = async (req, res, next) => {
+    await Category.find()
     .select('_id name')
     .exec()
     .then( docs => {
