@@ -1,7 +1,6 @@
 const mongoose = require('mongoose'); 
 //include models
 const Product = require("../models/product");
-const Category = require("../models/category");
 
 exports.get_all = (req, res, next) => {
     Product.find()
@@ -42,8 +41,7 @@ exports.get_all = (req, res, next) => {
 }
 
 //store data to DB
-exports.store = (req, res, next) => {
-   
+exports.store = (req, res, next) => {   
     const product = new Product({
         _id         : new mongoose.Types.ObjectId(),
         name        : req.body.name,
@@ -52,8 +50,7 @@ exports.store = (req, res, next) => {
         price_sell  : req.body.price_sell,
         stock       : req.body.stock,
         productImage: req.file.path
-    });
-
+    });    
     product.save() 
     .then(result => {
         res.status(201).json({

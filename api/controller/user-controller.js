@@ -4,26 +4,29 @@ const jwt = require('jsonwebtoken');
 //import models
 const User = require('../models/user');
 
-exports.user_signup = (req, res, next) => {
+exports.user_signup = (req, res, next) => {    
+    // return res.status(200).json({
+    //     message: req.body.email
+    // });
     User.find({ email: req.body.email })
     .exec()
-    .then(doc => {
+    .then(doc => {        
         if (doc.length >= 1) {
             return res.status(409).json({
                 message: 'email already exists'
             });
-        } else {
-            bcrypt.hash(req.body.password, 10, (err, hash) => {
-                if (err) {
+        } else {            
+            bcrypt.hash(req.body.password, 10, (err, hash) => {                                                               
+                if (err) {                    
                     return res.status(500).json({
                         error: err
                     });
-                } else {
+                } else {                                           
                     const user = new User({
                         _id: new mongoose.Types.ObjectId(),
                         email: req.body.email,
                         password: hash
-                    });
+                    });                    
                     user.save()
                     .then(result => {
                         console.log(result);
